@@ -37,7 +37,7 @@ int main(int argc, char ** argv)
         cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
 
         cv::Sobel(gray, sobelX, CV_8U, 1, 0);
-        cv::Sobel(gray, sobelY, CV_8U, 1, 0);
+        cv::Sobel(gray, sobelY, CV_8U, 0, 1);
 
 
         video.write(sobelX + sobelY);
