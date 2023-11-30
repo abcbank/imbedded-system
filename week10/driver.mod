@@ -1,0 +1,2 @@
+/home/kusw05/imbedded-system/seg7_example/driver.o
+
