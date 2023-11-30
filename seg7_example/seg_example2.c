@@ -5,10 +5,10 @@
 #include <fcntl.h>
 #include <termios.h>
 
-static struct termios init_setting, new setting;
+static struct termios init_setting, new_setting;
 
-char seg num [10] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xd8, 0x80, 0x90};
-char seg drum [10] = {0x40, 0x79, 0x24, 0x30, 0x19, 0x12, 0x02, 0x58, 0x00, 0x10};
+char seg_num [10] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xd8, 0x80, 0x90};
+char seg_drum [10] = {0x40, 0x79, 0x24, 0x30, 0x19, 0x12, 0x02, 0x58, 0x00, 0x10};
 
 #define D1 0x01
 #define D2 0x02
@@ -19,11 +19,11 @@ void init_keyboard()
 {
     tcgetattr(STDIN_FILENO, &init_setting);
     new_setting = init_setting;
-    new_setting.c_1flag &= ~ICANON;
-    new setting.c_lflag &= ~ECHO;
+    new_setting.c_iflag &= ~ICANON;
+    new_setting.c_iflag &= ~ECHO;
     new_setting.c_cc[VMIN] = 0;
     new_setting.c_cc[VTIME] = 0;
-    tcsetattr(0, TCSANOW, &new setting);
+    tcsetattr(0, TCSANOW, &new_setting);
 }
 void close_keyboard()
 {
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     tmp_n=0;
     delay_time = 1000000;
     
-    data[0]= (seg num[1] << 4) | D1;
+    data[0]= (seg_num[1] << 4) | D1;
     data[1] = (seg_num [2] << 4) | D2;
     data[2] = (seg_num [3] << 4) | D3;
     data[3]= (seg_num[4] << 4) | D4;

@@ -35,6 +35,7 @@ int main(int argc, char ** argv)
 	}
 
 	addr_gpio = (char *)mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, memfd, GPIO_BASE);
+	addr_gpio[SET_GPIO_0] = 1
 
 	if(addr_gpio == MAP_FAILED){
 		printf("mmap failed\n");

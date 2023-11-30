@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/homework/seg_drv.ko := aarch64-linux-gnu-ld -r  -EL  -maarch64elf -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/kusw05/imbedded-system/seg7_example/homework/seg_drv.ko /home/kusw05/imbedded-system/seg7_example/homework/seg_drv.o /home/kusw05/imbedded-system/seg7_example/homework/seg_drv.mod.o;  true

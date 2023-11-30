@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/homework/btn_drv.ko := aarch64-linux-gnu-ld -r  -EL  -maarch64elf -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.ko /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.o /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.mod.o;  true

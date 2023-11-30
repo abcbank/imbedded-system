@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/Module.symvers := sed 's/\.ko$$/\.o/' /home/kusw05/imbedded-system/seg7_example/modules.order | scripts/mod/modpost -m -a  -o /home/kusw05/imbedded-system/seg7_example/Module.symvers -e -i Module.symvers   -T -

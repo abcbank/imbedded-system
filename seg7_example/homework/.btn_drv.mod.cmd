@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/homework/btn_drv.mod := { echo  /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.o;  echo; } > /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.mod

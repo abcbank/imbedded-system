@@ -15,10 +15,11 @@ int main(int argc, char **argv) {
         return -1;
     }
     printf("Opening was successfull!\n");
+
     if(argv[1][0] == '0' && (argv[1][1] == 'x' || argv[1][1] == 'X'))
-        buff (unsigned short)strtol(&argv[1][2], NULL, 16);
+        buff = (unsigned short)strtol(&argv[1][2], NULL, 16);
     else
-        buff (unsigned short) strtol (&argv[1][0], NULL, 10);
+        buff = (unsigned short)strtol(&argv[1][0], NULL, 10);
     write(dev, &buff, 2);
     close(dev);
     return 0;

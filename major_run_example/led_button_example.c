@@ -13,7 +13,6 @@ int main(int argc, char **argv){
         printf("Opening was not possible!\n");
         return -1;
     }
-    
     printf("Opening was successfull!\n");
     while(1){
         read(dev, &buff, 1);

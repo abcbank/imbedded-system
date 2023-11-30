@@ -12,9 +12,30 @@ MODULE_DESCRIPTION("A simple gpio driver for segments");
 static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
-#define DRIVER_NAME "my_segment"
+#define DRIVER_NAME "SevenSegment"
 #define DRIVER_CLASS "MyModuleClass_seg"
 /* @brief Write data to buffer */
+
+#define SEGOFF 0
+#define SEGON  1
+
+#define OFF 1
+#define ON  0
+
+#define A  21
+#define B  20
+#define C  16
+#define D  12
+#define E  7
+#define F  8
+#define G  25
+#define DP 24
+
+#define SEG01 2
+#define SEG02 3
+#define SEG03 4
+#define SEG04 17
+
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) { 
     int to_copy, not_copied, delta;
     unsigned short value = 0;
@@ -22,80 +43,151 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
     to_copy = min(count, sizeof(value));
     /* Copy data to user */
     not_copied = copy_from_user(&value, user_buffer, to_copy);
-    /* Setting the segments LED */
-    if (value & (1 << 0)){ 
-        gpio_set_value(2, 1);
+
+    gpio_set_value(A, OFF);
+    gpio_set_value(B, OFF);
+    gpio_set_value(C, OFF);
+    gpio_set_value(D, OFF);
+    gpio_set_value(E, OFF);
+    gpio_set_value(F, OFF);
+    gpio_set_value(G, OFF);
+    gpio_set_value(DP, OFF);
+
+    int segValue = (value & 0xf0);
+    int gpioValue = value & 0x0f;
+
+    if(segValue & 0x10)
+        gpio_set_value(SEG01, SEGON);
+    else
+        gpio_set_value(SEG01, SEGOFF);
+    
+    if(segValue & 0x20)
+        gpio_set_value(SEG02, SEGON);
+    else
+        gpio_set_value(SEG02, SEGOFF);
+    
+    if(segValue & 0x40)
+        gpio_set_value(SEG03, SEGON);
+    else
+        gpio_set_value(SEG03, SEGOFF);
+    
+    if(segValue & 0x80)
+        gpio_set_value(SEG04, SEGON);
+    else
+        gpio_set_value(SEG04, SEGOFF);
+
+    switch(gpioValue){
+        case 0:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, ON);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, OFF);
+            gpio_set_value(DP, OFF);
+            break;
+        case 1:
+            gpio_set_value(A, OFF);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, OFF);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, OFF);
+            gpio_set_value(G, OFF);
+            gpio_set_value(DP, OFF);
+            break;
+        case 2:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, OFF);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, ON);
+            gpio_set_value(F, OFF);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 3:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, OFF);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 4:
+            gpio_set_value(A, OFF);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, OFF);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 5:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, OFF);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 6:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, OFF);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, ON);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 7:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, OFF);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, OFF);
+            gpio_set_value(DP, OFF);
+            break;
+        case 8:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, ON);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        case 9:
+            gpio_set_value(A, ON);
+            gpio_set_value(B, ON);
+            gpio_set_value(C, ON);
+            gpio_set_value(D, ON);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, ON);
+            gpio_set_value(G, ON);
+            gpio_set_value(DP, OFF);
+            break;
+        default:
+            gpio_set_value(A, OFF);
+            gpio_set_value(B, OFF);
+            gpio_set_value(C, OFF);
+            gpio_set_value(D, OFF);
+            gpio_set_value(E, OFF);
+            gpio_set_value(F, OFF);
+            gpio_set_value(G, OFF);
+            gpio_set_value(DP, OFF);
+            break;
     }
-    else{ 
-        gpio_set_value(2, 0); 
-    }
-    if (value & (1 << 1)){ 
-        gpio_set_value(3, 1);
-    }
-    else{ 
-        gpio_set_value(3, 0);
-    }
-    if (value & (1 << 2)){ 
-        gpio_set_value(4, 1);
-    }
-    else{ 
-        gpio_set_value(4, 0);
-    }
-    if (value & (1 << 3)){ 
-        gpio_set_value(17, 1);
-    }
-    else{ 
-        gpio_set_value(17, 0);
-    }
-    if (value & (1 << 4)){ 
-        gpio_set_value(21, 1);
-    }
-    else{ 
-        gpio_set_value(21, 0);
-    }
-    if (value & (1 << 5)){ 
-        gpio_set_value(20, 1); 
-    }
-    else{ 
-        gpio_set_value(20, 0);
-    }
-    if (value & (1 << 6)){ 
-        gpio_set_value(16, 1); 
-    }
-    else{ 
-        gpio_set_value(16, 0); 
-    }
-    if (value & (1 << 7)){ 
-        gpio_set_value(12, 1); 
-    }
-    else{ 
-        gpio_set_value(12, 0);
-    }
-    if (value & (1 << 8)){ 
-        gpio_set_value(7, 1);
-    }
-    else{ 
-        gpio_set_value(7, 0); 
-    }
-    if (value & (1 << 9)){ 
-        gpio_set_value(8, 1);
-    }
-    else{
-        gpio_set_value(8, 0); 
-    }
-    if (value & (1 << 10)){ 
-        gpio_set_value(25, 1);
-    }
-    else{ 
-        gpio_set_value(25, 0);
-    }
-    if (value & (1 << 11)){ 
-        gpio_set_value(24, 1);
-    }
-    else{
-        gpio_set_value (24, 0);
-    }
-    /* Calculate data */
     delta = to_copy - not_copied; 
     return delta;
 }

@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/modules.order := {   echo /home/kusw05/imbedded-system/seg7_example/driver.ko; :; } | awk '!x[$$0]++' - > /home/kusw05/imbedded-system/seg7_example/modules.order

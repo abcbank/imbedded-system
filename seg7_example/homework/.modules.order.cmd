@@ -1,0 +1,1 @@
+cmd_/home/kusw05/imbedded-system/seg7_example/homework/modules.order := {   echo /home/kusw05/imbedded-system/seg7_example/homework/seg_drv.ko;   echo /home/kusw05/imbedded-system/seg7_example/homework/btn_drv.ko; :; } | awk '!x[$$0]++' - > /home/kusw05/imbedded-system/seg7_example/homework/modules.order
