@@ -14,7 +14,7 @@ static struct class *my_class;
 static struct cdev my_device;
 
 #define DRIVER_NAME "OutputController"
-#define DRIVER_CLASS "InputControlModule"
+#define DRIVER_CLASS "OutControlModule"
 
 #define PIN_01 10
 #define PIN_02 11
