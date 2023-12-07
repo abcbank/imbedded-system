@@ -163,7 +163,7 @@ static int __init ModuleInit(void) {
         goto AddError;
     }
 
-    if(gpio_request(PIN_01, "rpi-gpio-17")){
+    if(gpio_request(PIN_01, "rpi-gpio-10")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -173,7 +173,7 @@ static int __init ModuleInit(void) {
         goto PIN01_ERROR;
     }
 
-    if(gpio_request(PIN_02, "rpi-gpio-17")){
+    if(gpio_request(PIN_02, "rpi-gpio-11")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -183,7 +183,7 @@ static int __init ModuleInit(void) {
         goto PIN02_ERROR;
     }
 
-    if(gpio_request(PIN_03, "rpi-gpio-17")){
+    if(gpio_request(PIN_03, "rpi-gpio-12")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -193,7 +193,7 @@ static int __init ModuleInit(void) {
         goto PIN03_ERROR;
     }
 
-    if(gpio_request(PIN_04, "rpi-gpio-17")){
+    if(gpio_request(PIN_04, "rpi-gpio-13")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -203,7 +203,7 @@ static int __init ModuleInit(void) {
         goto PIN04_ERROR;
     }
 
-    if(gpio_request(PIN_05, "rpi-gpio-17")){
+    if(gpio_request(PIN_05, "rpi-gpio-14")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -213,7 +213,7 @@ static int __init ModuleInit(void) {
         goto PIN05_ERROR;
     }
 
-    if(gpio_request(PIN_06, "rpi-gpio-17")){
+    if(gpio_request(PIN_06, "rpi-gpio-15")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
@@ -223,7 +223,7 @@ static int __init ModuleInit(void) {
         goto PIN06_ERROR;
     }
 
-    if(gpio_request(PIN_07, "rpi-gpio-17")){
+    if(gpio_request(PIN_07, "rpi-gpio-16")){
         printk("Can not allocate GPIO 17\n");
         goto AddError;
     }
