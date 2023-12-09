@@ -7,12 +7,30 @@
 #include <thread>
 #include "Modules/data.hpp"
 #include "Modules/IOController.hpp"
+#include "Modules/SegmentController.hpp"
 
 using namespace std;
 
 int main(void){
-    IOController IO = IOController("InputController", "OutputController");
+    IOController IO = IOController("/dev/InputController", "/dev/OutputController");
+    SegmentController Segment = SegmentController("/dev/SegmentController");
+    IO.StartPolling();
 
-    printf("Input: %x\n", IO.Input);
-    printf("Output: %x\n", IO.Output);
+    IO.Output.Pin_01 = 1;
+    IO.Output.Pin_02 = 0;
+    IO.Output.Pin_03 = 0;
+    sleep(3);
+
+    IO.Output.Pin_01 = 0;
+    IO.Output.Pin_02 = 1;
+    IO.Output.Pin_03 = 0;
+    sleep(3);
+
+    IO.Output.Pin_01 = 0;
+    IO.Output.Pin_02 = 0;
+    IO.Output.Pin_03 = 1;
+    sleep(3);
+
+
+    IO.Dispose();
 }

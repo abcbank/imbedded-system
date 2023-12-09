@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string>
-#include <chrono>
 #include <thread>
 #include "data.hpp"
 
@@ -15,20 +14,15 @@ using namespace std;
 
 class IOController{
     private:
-        thread _poller;
+        thread _poller = thread();
         int _input;
         int _output;
-        int _isDisposing;
-        int _isPolling;
-        void Polling();
     public:
-        int Valid;
         PinArray Input;
         PinArray Output;
         IOController(const char* InputDriver, const char* OutputDriver);
         void StartPolling();
         void StopPolling();
-        void Dispose();
 };
 
 #endif
