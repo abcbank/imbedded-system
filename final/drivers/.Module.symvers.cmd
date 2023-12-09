@@ -1,1 +1,0 @@
-cmd_/home/kusw05/imbedded-system/final/drivers/Module.symvers := sed 's/ko$$/o/' /home/kusw05/imbedded-system/final/drivers/modules.order | scripts/mod/modpost -m -a   -o /home/kusw05/imbedded-system/final/drivers/Module.symvers -e -i Module.symvers   -T -
