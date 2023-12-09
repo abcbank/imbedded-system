@@ -88,7 +88,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, ON);
             gpio_set_value(F, ON);
             gpio_set_value(G, OFF);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 1:
             gpio_set_value(A, OFF);
@@ -98,7 +98,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, OFF);
             gpio_set_value(G, OFF);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 2:
             gpio_set_value(A, ON);
@@ -118,7 +118,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, OFF);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 4:
             gpio_set_value(A, OFF);
@@ -128,7 +128,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, ON);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 5:
             gpio_set_value(A, ON);
@@ -138,7 +138,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, ON);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 6:
             gpio_set_value(A, ON);
@@ -148,7 +148,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, ON);
             gpio_set_value(F, ON);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 7:
             gpio_set_value(A, ON);
@@ -158,7 +158,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, ON);
             gpio_set_value(G, OFF);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 8:
             gpio_set_value(A, ON);
@@ -168,7 +168,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, ON);
             gpio_set_value(F, ON);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         case 9:
             gpio_set_value(A, ON);
@@ -178,7 +178,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, ON);
             gpio_set_value(G, ON);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
         default:
             gpio_set_value(A, OFF);
@@ -188,7 +188,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
             gpio_set_value(E, OFF);
             gpio_set_value(F, OFF);
             gpio_set_value(G, OFF);
-            gpio_set_value(DP, OFF);
+            gpio_set_value(DP, ON);
             break;
     }
     delta = to_copy - not_copied; 
