@@ -30,9 +30,9 @@ __used __section("__versions") = {
 	{ 0x6091b333, "unregister_chrdev_region" },
 	{ 0xf0462214, "class_destroy" },
 	{ 0x78770421, "device_destroy" },
-	{ 0x47229b5c, "gpio_request" },
 	{ 0xfe990052, "gpio_free" },
 	{ 0xf1af98fe, "gpiod_direction_output_raw" },
+	{ 0x47229b5c, "gpio_request" },
 	{ 0xc2bcb805, "cdev_add" },
 	{ 0xaaad239e, "cdev_init" },
 	{ 0x5d3eb04, "device_create" },
@@ -51,4 +51,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "9D07C45D970836EE44CB63A");
+MODULE_INFO(srcversion, "F90B89033D6610C2A120B58");
