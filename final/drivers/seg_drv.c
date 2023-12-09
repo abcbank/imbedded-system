@@ -37,7 +37,7 @@ static struct cdev my_device;
 #define SEG01 2 
 #define SEG02 3
 #define SEG03 4
-#define SEG04 5
+#define SEG04 7
 
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) { 
     int to_copy, not_copied, delta;
@@ -235,99 +235,99 @@ static int __init ModuleInit(void) {
         printk("Registering of device to kernel failed!\n"); goto AddError;
     }
     if(gpio_request(A, "rpi-gpio-10")) { 
-        printk("Can not allocate GPIO 3\n"); goto AddError;
+        printk("Can not allocate A\n"); goto AddError;
     }
     /* Set GPIO 2 direction */
     if (gpio_direction_output(A, 0)) {
-        printk("Can not set GPIO 2 to output!\n"); goto Gpio2Error;
+        printk("Can not set A to output!\n"); goto Gpio2Error;
     }
     if(gpio_request(B, "rpi-gpio-3")) { 
-        printk("Can not allocate GPIO 3\n"); goto AddError;
+        printk("Can not allocate B\n"); goto AddError;
     }
     /* Set GPIO 3 direction */ 
     if (gpio_direction_output(B, 0)) { 
-        printk("Can not set GPIO 3 to output!\n"); goto Gpio3Error;
+        printk("Can not set B to output!\n"); goto Gpio3Error;
     }
     /* GPIO 4 init */ 
     if(gpio_request(C, "rpi-gpio-4")) { 
-        printk("Can not allocate GPIO 4\n"); goto AddError;
+        printk("Can not allocate C\n"); goto AddError;
     }
     /* Set GPIO 4 direction */ 
     if(gpio_direction_output(C, 0)) {
-        printk("Can not set GPIO 4 to output!\n"); goto Gpio4Error;
+        printk("Can not set C to output!\n"); goto Gpio4Error;
     }
     /* GPIO 17 init */ 
     if (gpio_request(D, "rpi-gpio-17")) { 
-        printk("Can not allocate GPIO 17\n"); goto AddError;
+        printk("Can not allocate D\n"); goto AddError;
     }
     /* Set GPIO 17 direction */
     if(gpio_direction_output(D, 0)) { 
-        printk("Can not set GPIO 17 to output!\n"); goto Gpio17Error;
+        printk("Can not set D to output!\n"); goto Gpio17Error;
     }
     /* Set A~DP segments GPIO */
     /* GPIO 21 init */
     if(gpio_request(E, "rpi-gpio-21")) { 
-        printk("Can not allocate GPIO 21\n"); goto AddError;
+        printk("Can not allocate E\n"); goto AddError;
     }
     /* Set GPIO 21 direction */
     if (gpio_direction_output(E, 0)) { 
-        printk("Can not set GPIO 21 to output!\n"); goto Gpio21Error;
+        printk("Can not set E to output!\n"); goto Gpio21Error;
     }
     /* GPIO 20 init */
     if (gpio_request(F, "rpi-gpio-20")) { 
-        printk("Can not allocate GPIO_20\n"); goto AddError;
+        printk("Can not allocate F\n"); goto AddError;
     }
     /* Set GPIO 20 direction */
     if (gpio_direction_output (F, 0)) { 
-        printk("Can not set GPIO 20 to output!\n"); goto Gpio20Error;
+        printk("Can not set F to output!\n"); goto Gpio20Error;
     }
     /* GPIO 16 init */
-    if(gpio_request(G, "rpi-gpio-16")) { 
-        printk("Can not allocate GPIO 16\n"); goto AddError;
+    if(gpio_request(G, "g")) { 
+        printk("Can not allocate G\n"); goto AddError;
     }
     /* Set GPIO 16 direction */
     if(gpio_direction_output(G, 0)) { 
-        printk("Can not set GPIO 16 to output!\n"); goto Gpio16Error;
+        printk("Can not set G to output!\n"); goto Gpio16Error;
     }
     /* GPIO 12 init */
-    if(gpio_request(DP, "rpi-gpio-12")) { 
-        printk("Can not allocate GPIO 12\n"); goto AddError;
+    if(gpio_request(DP, "DP")) { 
+        printk("Can not allocate DP\n"); goto AddError;
     }
     /* Set GPIO 12 direction */
     if(gpio_direction_output(DP, 0)) { 
-        printk("Can not set GPIO 12 to output!\n"); goto Gpio12Error;
+        printk("Can not set DP to output!\n"); goto Gpio12Error;
     }
     /* GPIO 7 init */
-    if (gpio_request(SEG01, "rpi-gpio-7")) { 
-        printk("Can not allocate GPIO 7\n"); goto AddError;
+    if (gpio_request(SEG01, "seg01")) { 
+        printk("Can not allocate seg01\n"); goto AddError;
     }
     /* Set GPIO 7 direction */
     if(gpio_direction_output(SEG01, 0)) { 
-        printk("Can not set GPIO 7 to output!\n"); goto Gpio7Error;
+        printk("Can not set seg01 to output!\n"); goto Gpio7Error;
     }
     /* GPIO 8 init */
-    if(gpio_request(SEG02, "rpi-gpio-8")) { 
-        printk("Can not allocate GPIO 8\n"); goto AddError;
+    if(gpio_request(SEG02, "seg02")) { 
+        printk("Can not allocate seg02\n"); goto AddError;
     }
     /* Set GPIO 8 direction */
     if (gpio_direction_output(SEG02, 0)) { 
-        printk("Can not set GPIO 8 to output!\n"); goto Gpio8Error;
+        printk("Can not set SEG02 to output!\n"); goto Gpio8Error;
     }
     /* GPIO 25 init */ 
-    if(gpio_request(SEG03, "rpi-gpio-25")) { 
-        printk("Can not allocate GPIO 25\n"); goto AddError;
+    if(gpio_request(SEG03, "seg03")) { 
+        printk("Can not allocate SEG03\n"); goto AddError;
     }
     /* Set GPIO 25 direction */ 
     if(gpio_direction_output(SEG03, 0)) { 
-        printk("Can not set GPIO 25 to output!\n"); goto Gpio25Error;
+        printk("Can not set SEG03 to output!\n"); goto Gpio25Error;
     }
     /* GPIO 24 init */ 
-    if(gpio_request(SEG04, "rpi-gpio-24")) {
-        printk("Can not allocate GPIO 24\n"); goto AddError;
+    if(gpio_request(SEG04, "seg04")) {
+        printk("Can not allocate seg04\n"); goto AddError;
     }
     /* Set GPIO 24 direction */ 
     if(gpio_direction_output(SEG04, 0)) { 
-        printk("Can not set GPIO 24 to output!\n"); goto Gpio24Error;
+        printk("Can not set seg04 to output!\n"); goto Gpio24Error;
     }
     return 0;
     Gpio2Error: gpio_free(A);
