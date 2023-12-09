@@ -19,8 +19,8 @@ static struct cdev my_device;
 #define DRIVER_CLASS "SegmentControlModule"
 /* @brief Write data to buffer */
 
-#define SEGOFF 0
-#define SEGON  1
+#define SEGOFF 1
+#define SEGON  0
 
 #define OFF 1
 #define ON  0

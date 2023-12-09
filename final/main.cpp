@@ -13,17 +13,18 @@ using namespace std;
 
 int main(void){
     IOController IO = IOController("/dev/InputController", "/dev/OutputController");
-    SegmentController Segment = SegmentController("/dev/SegmentController");
+    SegmentController Segment = SegmentController("/dev/svnSegment");
     IO.StartPolling();
+    Segment.StartPolling();
 
     IO.Output.Pin_01 = 1;
     IO.Output.Pin_02 = 0;
-    IO.Output.Pin_03 = 0;
+    IO.Output.Pin_03 = 1;
     sleep(3);
 
     IO.Output.Pin_01 = 0;
     IO.Output.Pin_02 = 1;
-    IO.Output.Pin_03 = 0;
+    IO.Output.Pin_03 = 1;
     sleep(3);
 
     IO.Output.Pin_01 = 0;
@@ -33,4 +34,5 @@ int main(void){
 
 
     IO.Dispose();
+    Segment.Dispose();
 }

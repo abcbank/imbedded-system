@@ -53,9 +53,10 @@ void SegmentController::Polling(){
     int counter = 0;
 
     while(!this->_isDisposing && this->_isPolling){
-        int tmp = ((1) << counter) | this->Values[counter];
-        write(this->_driver, &tmp, tmp);
+        int tmp = ((1) << counter + 4) | this->Values[counter];
+        printf("%x\n",tmp);
+        write(this->_driver, &tmp, 4);
         counter = (counter + 1) % 4;
-        this_thread::sleep_for(chrono::milliseconds(50));
+        this_thread::sleep_for(chrono::milliseconds(1000));
     }
 }
