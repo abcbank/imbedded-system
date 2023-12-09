@@ -193,10 +193,10 @@ static int __init ModuleInit(void) {
         goto PIN03_ERROR;
     }
 
-    if(gpio_request(PIN_04, "rpi-gpio-13")){
-        printk("Can not allocate GPIO 17\n");
-        goto AddError;
-    }
+    // if(gpio_request(PIN_04, "rpi-gpio-13")){
+    //     printk("Can not allocate GPIO 17\n");
+    //     goto AddError;
+    // }
 
     // if(gpio_direction_output(PIN_04, 0)) {
     //     printk("Can not set GPIO 4 to output!\n");
