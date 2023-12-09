@@ -16,9 +16,9 @@ static struct cdev my_device;
 #define DRIVER_NAME "InputController"
 #define DRIVER_CLASS "InputControlModule"
 
-#define PIN_01 16
-#define PIN_02 20
-#define PIN_03 21
+#define PIN_01 23
+#define PIN_02 24
+#define PIN_03 25
 #define PIN_04 4
 #define PIN_05 5
 #define PIN_06 6
