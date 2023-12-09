@@ -22,8 +22,8 @@ static struct cdev my_device;
 #define SEGOFF 1
 #define SEGON  0
 
-#define OFF 1
-#define ON  0
+#define OFF 0
+#define ON  1
 
 #define A  10
 #define B  11
