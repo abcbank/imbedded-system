@@ -16,7 +16,7 @@ static struct class *my_class;
 static struct cdev my_device;
 
 #define DRIVER_NAME "svnSegment"
-#define DRIVER_CLASS "SevenSegmentModule"
+#define DRIVER_CLASS "SegmentControlModule"
 /* @brief Write data to buffer */
 
 #define SEGOFF 0
@@ -25,19 +25,19 @@ static struct cdev my_device;
 #define OFF 1
 #define ON  0
 
-#define A  21
-#define B  20
-#define C  16
-#define D  12
-#define E  7
-#define F  8
-#define G  25
-#define DP 24
+#define A  10
+#define B  11
+#define C  13
+#define D  5
+#define E  0
+#define F  9
+#define G  19
+#define DP 6
 
-#define SEG01 2
+#define SEG01 2 
 #define SEG02 3
 #define SEG03 4
-#define SEG04 17
+#define SEG04 5
 
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) { 
     int to_copy, not_copied, delta;

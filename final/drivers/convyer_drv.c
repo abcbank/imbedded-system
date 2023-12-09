@@ -13,10 +13,11 @@ static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
 
-#define CONVYER_PIN 17
+#define AA_PIN 19
+#define AB_PIN 20
 
-#define DRIVER_NAME "convyer"
-#define DRIVER_CLASS "ConvyerModuleClass"
+#define DRIVER_NAME "ConvyerController"
+#define DRIVER_CLASS "ConvyerControlModule"
 
 static ssize_t driver_read(struct file *File, char *user_buffer, size_t count, loff_t *offs){
     int to_copy, not_copied, delta;
@@ -24,12 +25,12 @@ static ssize_t driver_read(struct file *File, char *user_buffer, size_t count, l
 
     to_copy= min(count, sizeof(tmp));
 
-    tmp = gpio_get_value(CONVYER_PIN);
+    tmp = gpio_get_value(AB_PIN) << 1 & gpio_get_value(AA_PIN);
 
     not_copied = copy_to_user(user_buffer, &tmp, to_copy);
 
-    /* Calculate data */
     delta = to_copy - not_copied;
+
     return delta;
 }
 
@@ -41,15 +42,32 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
 
     not_copied = copy_from_user(&value, user_buffer, to_copy);
 
-    if(value){
-        gpio_set_value(CONVYER_PIN, 1);
+    switch(value){
+
+        case 0:
+            gpio_set_value(AA_PIN, 0);
+            gpio_set_value(AB_PIN, 0);
+        break;
+        
+        case 1:
+            gpio_set_value(AA_PIN, 1);
+            gpio_set_value(AB_PIN, 0);
+        break;
+
+        case 2:
+            gpio_set_value(AA_PIN, 0);
+            gpio_set_value(AB_PIN, 1);
+        break;
+        
+        default:
+            gpio_set_value(AA_PIN, 0);
+            gpio_set_value(AB_PIN, 0);
+        break;
     }
-    else{
-        gpio_set_value(CONVYER_PIN, 0);
-    }
-    
-    /* Calculate data */
+
+
     delta =  to_copy - not_copied;
+
     return delta;
 }
 
@@ -95,21 +113,33 @@ static int __init ModuleInit(void) {
         goto AddError;
     }
 
-    if(gpio_request(CONVYER_PIN, "rpi-gpio-17")){
-        printk("Can not allocate GPIO 17\n");
+    if(gpio_request(AA_PIN, "rpi-gpio-18")){
+        printk("Can not allocate GPIO 19\n");
         goto AddError;
     }
 
-    if(gpio_direction_output(CONVYER_PIN, 0)) {
-        printk("Can not set GPIO 17 to output!\n");
-        goto Gpio17Error;
+    if(gpio_direction_output(AA_PIN, 0)) {
+        printk("Can not set GPIO 19 to output!\n");
+        goto Gpio19Error;
+    }
+
+    if(gpio_request(AB_PIN, "rpi-gpio-20")){
+        printk("Can not allocate GPIO 20\n");
+        goto AddError;
+    }
+
+    if(gpio_direction_output(AB_PIN, 0)) {
+        printk("Can not set GPIO 20 to output!\n");
+        goto Gpio20Error;
     }
 
 
     return 0;
 
-    Gpio17Error:
-        gpio_free(CONVYER_PIN);
+    Gpio19Error:
+        gpio_free(AA_PIN);
+    Gpio20Error:
+        gpio_free(AB_PIN);
     AddError:
         device_destroy(my_class, my_device_nr);
     FileError:
@@ -120,7 +150,11 @@ static int __init ModuleInit(void) {
 }
 
 static void __exit ModuleExit(void) {
-    gpio_free(CONVYER_PIN);
+
+    gpio_set_value(AA_PIN, 0);
+    gpio_set_value(AB_PIN, 0);
+    gpio_free(AA_PIN);
+    gpio_free(AB_PIN);
     cdev_del(&my_device);
     device_destroy(my_class, my_device_nr);
     class_destroy(my_class);

@@ -14,16 +14,16 @@ static struct class *my_class;
 static struct cdev my_device;
 
 #define DRIVER_NAME "OutputController"
-#define DRIVER_CLASS "OutControlModule"
+#define DRIVER_CLASS "OutputControlModule"
 
-#define PIN_01 10
-#define PIN_02 11
-#define PIN_03 12
-#define PIN_04 13
-#define PIN_05 14
-#define PIN_06 15
-#define PIN_07 16
-#define PIN_08 17
+#define PIN_01 16
+#define PIN_02 20
+#define PIN_03 21
+#define PIN_04 12
+#define PIN_05 13
+#define PIN_06 16
+#define PIN_07 17
+#define PIN_08 18
 
 typedef struct _PinArray{
     unsigned char Pin_01: 1;
@@ -45,11 +45,11 @@ static ssize_t driver_read(struct file *File, char *user_buffer, size_t count, l
     tmp.Pin_01 = gpio_get_value(PIN_01);
     tmp.Pin_02 = gpio_get_value(PIN_02);
     tmp.Pin_03 = gpio_get_value(PIN_03);
-    tmp.Pin_04 = gpio_get_value(PIN_04);
-    tmp.Pin_05 = gpio_get_value(PIN_05);
-    tmp.Pin_06 = gpio_get_value(PIN_06);
-    tmp.Pin_07 = gpio_get_value(PIN_07);
-    tmp.Pin_08 = gpio_get_value(PIN_08);
+    tmp.Pin_04 = 0; //gpio_get_value(PIN_04);
+    tmp.Pin_05 = 0; //gpio_get_value(PIN_05);
+    tmp.Pin_06 = 0; //gpio_get_value(PIN_06);
+    tmp.Pin_07 = 0; //gpio_get_value(PIN_07);
+    tmp.Pin_08 = 0; //gpio_get_value(PIN_08);
 
     not_copied = copy_to_user(user_buffer, &tmp, to_copy);
 
@@ -84,36 +84,36 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
     else{
         gpio_set_value(PIN_03, 0);
     }
-    if(value.Pin_04){
-        gpio_set_value(PIN_04, 1);
-    }
-    else{
-        gpio_set_value(PIN_04, 0);
-    }
-    if(value.Pin_05){
-        gpio_set_value(PIN_05, 1);
-    }
-    else{
-        gpio_set_value(PIN_05, 0);
-    }
-    if(value.Pin_06){
-        gpio_set_value(PIN_06, 1);
-    }
-    else{
-        gpio_set_value(PIN_06, 0);
-    }
-    if(value.Pin_07){
-        gpio_set_value(PIN_07, 1);
-    }
-    else{
-        gpio_set_value(PIN_07, 0);
-    }
-    if(value.Pin_08){
-        gpio_set_value(PIN_08, 1);
-    }
-    else{
-        gpio_set_value(PIN_08, 0);
-    }
+    // if(value.Pin_04){
+    //     gpio_set_value(PIN_04, 1);
+    // }
+    // else{
+    //     gpio_set_value(PIN_04, 0);
+    // }
+    // if(value.Pin_05){
+    //     gpio_set_value(PIN_05, 1);
+    // }
+    // else{
+    //     gpio_set_value(PIN_05, 0);
+    // }
+    // if(value.Pin_06){
+    //     gpio_set_value(PIN_06, 1);
+    // }
+    // else{
+    //     gpio_set_value(PIN_06, 0);
+    // }
+    // if(value.Pin_07){
+    //     gpio_set_value(PIN_07, 1);
+    // }
+    // else{
+    //     gpio_set_value(PIN_07, 0);
+    // }
+    // if(value.Pin_08){
+    //     gpio_set_value(PIN_08, 1);
+    // }
+    // else{
+    //     gpio_set_value(PIN_08, 0);
+    // }
 
     delta =  to_copy - not_copied;
     return delta;
@@ -198,50 +198,50 @@ static int __init ModuleInit(void) {
         goto AddError;
     }
 
-    if(gpio_direction_output(PIN_04, 0)) {
-        printk("Can not set GPIO 4 to output!\n");
-        goto PIN04_ERROR;
-    }
+    // if(gpio_direction_output(PIN_04, 0)) {
+    //     printk("Can not set GPIO 4 to output!\n");
+    //     goto PIN04_ERROR;
+    // }
 
-    if(gpio_request(PIN_05, "rpi-gpio-14")){
-        printk("Can not allocate GPIO 17\n");
-        goto AddError;
-    }
+    // if(gpio_request(PIN_05, "rpi-gpio-14")){
+    //     printk("Can not allocate GPIO 17\n");
+    //     goto AddError;
+    // }
 
-    if(gpio_direction_output(PIN_05, 0)) {
-        printk("Can not set GPIO 4 to output!\n");
-        goto PIN05_ERROR;
-    }
+    // if(gpio_direction_output(PIN_05, 0)) {
+    //     printk("Can not set GPIO 4 to output!\n");
+    //     goto PIN05_ERROR;
+    // }
 
-    if(gpio_request(PIN_06, "rpi-gpio-15")){
-        printk("Can not allocate GPIO 17\n");
-        goto AddError;
-    }
+    // if(gpio_request(PIN_06, "rpi-gpio-15")){
+    //     printk("Can not allocate GPIO 17\n");
+    //     goto AddError;
+    // }
 
-    if(gpio_direction_output(PIN_06, 0)) {
-        printk("Can not set GPIO 4 to output!\n");
-        goto PIN06_ERROR;
-    }
+    // if(gpio_direction_output(PIN_06, 0)) {
+    //     printk("Can not set GPIO 4 to output!\n");
+    //     goto PIN06_ERROR;
+    // }
 
-    if(gpio_request(PIN_07, "rpi-gpio-16")){
-        printk("Can not allocate GPIO 17\n");
-        goto AddError;
-    }
+    // if(gpio_request(PIN_07, "rpi-gpio-16")){
+    //     printk("Can not allocate GPIO 17\n");
+    //     goto AddError;
+    // }
     
-    if(gpio_direction_output(PIN_07, 0)) {
-        printk("Can not set GPIO 4 to output!\n");
-        goto PIN07_ERROR;
-    }
+    // if(gpio_direction_output(PIN_07, 0)) {
+    //     printk("Can not set GPIO 4 to output!\n");
+    //     goto PIN07_ERROR;
+    // }
 
-    if(gpio_request(PIN_08, "rpi-gpio-17")){
-        printk("Can not allocate GPIO 17\n");
-        goto AddError;
-    }
+    // if(gpio_request(PIN_08, "rpi-gpio-17")){
+    //     printk("Can not allocate GPIO 17\n");
+    //     goto AddError;
+    // }
     
-    if(gpio_direction_output(PIN_08, 0)) {
-        printk("Can not set GPIO 4 to output!\n");
-        goto PIN08_ERROR;
-    }
+    // if(gpio_direction_output(PIN_08, 0)) {
+    //     printk("Can not set GPIO 4 to output!\n");
+    //     goto PIN08_ERROR;
+    // }
 
     return 0;
 
@@ -251,16 +251,16 @@ static int __init ModuleInit(void) {
         gpio_free(PIN_02);
     PIN03_ERROR:
         gpio_free(PIN_03);
-    PIN04_ERROR:
-        gpio_free(PIN_04);
-    PIN05_ERROR:
-        gpio_free(PIN_05);
-    PIN06_ERROR:
-        gpio_free(PIN_06);
-    PIN07_ERROR:
-        gpio_free(PIN_07);
-    PIN08_ERROR:
-        gpio_free(PIN_08);
+    // PIN04_ERROR:
+    //     gpio_free(PIN_04);
+    // PIN05_ERROR:
+    //     gpio_free(PIN_05);
+    // PIN06_ERROR:
+    //     gpio_free(PIN_06);
+    // PIN07_ERROR:
+    //     gpio_free(PIN_07);
+    // PIN08_ERROR:
+    //     gpio_free(PIN_08);
     AddError:
         device_destroy(my_class, my_device_nr);
     FileError:
@@ -274,11 +274,11 @@ static void __exit ModuleExit(void) {
     gpio_free(PIN_01);
     gpio_free(PIN_02);
     gpio_free(PIN_03);
-    gpio_free(PIN_04);
-    gpio_free(PIN_05);
-    gpio_free(PIN_06);
-    gpio_free(PIN_07);
-    gpio_free(PIN_08);
+    // gpio_free(PIN_04);
+    // gpio_free(PIN_05);
+    // gpio_free(PIN_06);
+    // gpio_free(PIN_07);
+    // gpio_free(PIN_08);
     cdev_del(&my_device);
     device_destroy(my_class, my_device_nr);
     class_destroy(my_class);
