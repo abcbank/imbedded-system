@@ -13,8 +13,8 @@ static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
 
-#define AA_PIN 19
-#define AB_PIN 20
+#define AA_PIN 7
+#define AB_PIN 8
 
 #define DRIVER_NAME "ConvyerController"
 #define DRIVER_CLASS "ConvyerControlModule"
