@@ -10,6 +10,12 @@ enum MasterStatus{
     RESET = 3
 };
 
+enum ConvyerStatus{
+    NONE = 0,
+    A = 1,
+    B = 2
+};
+
 typedef union _PinArray
 {
     unsigned char Pins;

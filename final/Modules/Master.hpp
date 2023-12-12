@@ -13,6 +13,7 @@
 #include "SegmentController.hpp"
 #include "IOController.hpp"
 #include "Camera.hpp"
+#include "ConvyerController.hpp"
 
 using namespace std;
 
@@ -25,12 +26,13 @@ class Master{
         // void DisableTest(IOController* ctrl, int Pin);
     public:
 
+        ConvyerController Convyer;
         MasterStatus Status;
         IOController IO;
         SegmentController Segment;
         Camera Capture;
         int Valid;
-        Master(const char* InputDriver, const char* OutputDriver, const char* SegmentDriver, int CamID);
+        Master(const char* InputDriver, const char* OutputDriver, const char* SegmentDriver, const char * ConvyerDriver, int CamID);
         void SetStatus(MasterStatus Status);
         void StartPolling();
         void StopPolling();

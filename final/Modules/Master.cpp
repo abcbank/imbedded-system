@@ -6,6 +6,7 @@ void Input01_Pressed(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if((master->Status == STOP | master->Status == READY)& master->Valid){
         master->SetStatus(RUN);
+        master->Convyer.Status = A;
         // 1. Convyer Start
         // 2. if Sensor Enabled
         // 3. Convyer Stop
@@ -20,6 +21,7 @@ void Input02_Pressed(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if(master->Status == RUN & master->Valid){
         master->SetStatus(STOP);
+        master->Convyer.Status = NONE;
         // 1. Convyer Stop
         // 2. Robot Stop
     }
@@ -52,6 +54,7 @@ void DisableTest(IOController* ctrl, int Pin){
 Master::Master(const char* InputDriver, 
                 const char* OutputDriver, 
                 const char* SegDriver,
+                const char* ConvyerDriver,
                 int CamID){
 
     this->Status = READY;
@@ -61,10 +64,14 @@ Master::Master(const char* InputDriver,
 
     this->Segment = SegmentController(SegDriver);
     this->IO = IOController(InputDriver, OutputDriver);
+    this->Convyer = ConvyerController(ConvyerDriver);
     this->Capture = Camera(CamID);
+
     this->Segment.ParentAddr = this;
     this->IO.ParentAddr = this;
     this->Capture.ParentAddr = this;
+    this->Convyer.ParentAddr = this;
+
     auto test = EnableTest;
     this->IO.InputEnabled[0].push_back((void (*)(IOController*, int))test);
     this->IO.InputEnabled[1].push_back((void (*)(IOController*, int))test);
@@ -79,7 +86,10 @@ Master::Master(const char* InputDriver,
     this->IO.InputDisabled[2].push_back((void (*)(IOController*, int))test);
     
     std::function<void()> temp;
-    if(this->Segment.Valid && this->IO.Valid && this->Capture.Valid){
+    if(this->Segment.Valid 
+    && this->IO.Valid 
+    //&& this->Capture.Valid 
+    && this->Convyer.Valid){
         this->Valid = 1;
     }
 }
@@ -127,6 +137,7 @@ void Master::StartPolling(){
         this->_isPolling = 1;
         this->Segment.StartPolling();
         this->IO.StartPolling();
+        this->Convyer.StartPolling();
     }
 }
 
@@ -135,6 +146,7 @@ void Master::StopPolling(){
         this->_isPolling = 0;
         this->Segment.StopPolling();
         this->IO.StopPolling();
+        this->Convyer.StopPolling();
     }
 }
 
@@ -143,4 +155,5 @@ void Master::Dispose(){
     this->Segment.Dispose();
     this->IO.Dispose();
     this->Capture.Dispose();
+    this->Convyer.Dispose();
 }

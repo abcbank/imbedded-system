@@ -14,8 +14,13 @@
 using namespace std;
 
 int main(void){
-    Master master = Master("/dev/InputController", "/dev/OutputController","/dev/svnSegment", 0);
-    
+    Master master = Master("/dev/InputController", "/dev/OutputController","/dev/svnSegment", "/dev/ConvyerController", 0);
+    if(!master.Valid){
+        printf("IO Controller: %d\n", master.IO.Valid);
+        printf("Segment Controller: %d\n", master.Segment.Valid);
+        printf("Camera Controller: %d\n", master.Capture.Valid);
+        printf("Convyer Controller: %d\n", master.Convyer.Valid);
+    }
     master.StartPolling();
     sleep(15);
 
