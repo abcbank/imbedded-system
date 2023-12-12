@@ -37,7 +37,7 @@ static struct cdev my_device;
 #define SEG01 2 
 #define SEG02 3
 #define SEG03 4
-#define SEG04 7
+#define SEG04 12
 
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) { 
     int to_copy, not_copied, delta;
