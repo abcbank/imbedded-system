@@ -1,5 +1,5 @@
-#ifndef SEGMENTCONTROLLER_H
-#define SEGMENTCONTROLLER_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,27 +9,26 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <opencv2/opencv.hpp>
 #include "data.hpp"
 
 using namespace std;
+using namespace cv;
 
-class SegmentController{
+class Camera{
     private:
+        VideoCapture cam;
         thread _poller;
         int _isDisposing;
         int _isPolling;
-        int _driver;
         void Polling();
-        void displaySegment();
-    public:
-        void *ParentAddr;
-        int Valid;
-        unsigned char Values[4];
 
-        SegmentController();
-        SegmentController(const char* InputDriver);
-        void StartPolling();
-        void StopPolling();
+    public:
+        Mat frame;
+        int Valid;
+        Camera();
+        Camera(int CamID);
+        int Capture();
         void Dispose();
 };
 

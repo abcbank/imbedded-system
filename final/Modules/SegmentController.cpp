@@ -1,15 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <string>
-#include <thread>
-#include <chrono>
-#include "data.hpp"
 #include "SegmentController.hpp"
 
 using namespace std;
+
+SegmentController::SegmentController(){
+    this->Valid = 0;
+    this->_isDisposing = 0;
+    this->_isPolling = 0;
+}
 
 SegmentController::SegmentController(const char* SegDriver){
     this->Valid = 1;
@@ -30,22 +27,24 @@ SegmentController::SegmentController(const char* SegDriver){
 }
 
 void SegmentController::StartPolling(){
-    if(!this->_poller.joinable()){
+    if(!this->_poller.joinable() && this->Valid){
         this->_isPolling = 1;
         this->_poller = thread([this] { this->Polling(); });
     }
 }
 
 void SegmentController::StopPolling(){
-    if(this->_poller.joinable()){
+    if(this->_poller.joinable() && this->Valid){
         this->_isPolling = 0;
         this->_poller.join();
     }
 }
 
 void SegmentController::Dispose(){
+    int tmp = 0;
     this->_isDisposing = 1;
     this->StopPolling();
+    write(this->_driver, &tmp, 4);
     close(this->_driver);
 }
 
@@ -54,7 +53,7 @@ void SegmentController::Polling(){
 
     while(!this->_isDisposing && this->_isPolling){
         int tmp = ((1) << counter + 4) | this->Values[counter];
-        tmp |= 1 << 0x80;
+        // tmp |= 0x90;
         // printf("%x\n",tmp);
         write(this->_driver, &tmp, 4);
         counter = (counter + 1) % 4;

@@ -18,20 +18,17 @@ using namespace std;
 
 class Master{
     private:
-        thread proc;
         int _isDisposing;
         int _isPolling;
         // void EnableTest(IOController* ctrl, int Pin);
         // void DisableTest(IOController* ctrl, int Pin);
     public:
 
-        MasterStatus Status;
         IOController IO;
         SegmentController Segment;
         Camera Capture;
         int Valid;
         Master(const char* InputDriver, const char* OutputDriver, const char* SegmentDriver, int CamID);
-        void SetStatus(MasterStatus Status);
         void StartPolling();
         void StopPolling();
         void Dispose();

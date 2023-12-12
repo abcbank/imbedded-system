@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "xlocmes": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "vector": "cpp",
+        "functional": "cpp"
     }
 }

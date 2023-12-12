@@ -25,6 +25,7 @@ class SegmentController{
         int Valid;
         unsigned char Values[4];
 
+        SegmentController();
         SegmentController(const char* InputDriver);
         void StartPolling();
         void StopPolling();
