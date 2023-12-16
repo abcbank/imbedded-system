@@ -25,7 +25,7 @@ class Master{
         // void EnableTest(IOController* ctrl, int Pin);
         // void DisableTest(IOController* ctrl, int Pin);
     public:
-
+        Mat TarFrame;
         ConvyerController Convyer;
         MasterStatus Status;
         IOController IO;

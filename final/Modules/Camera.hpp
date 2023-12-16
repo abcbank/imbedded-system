@@ -17,18 +17,21 @@ using namespace cv;
 
 class Camera{
     private:
-        VideoCapture cam;
         thread _poller;
+        VideoCapture cam;
         int _isDisposing;
         int _isPolling;
         void Polling();
 
     public:
+        int pause;
         void *ParentAddr;
         Mat frame;
         int Valid;
         Camera();
         Camera(int CamID);
+        void StartPolling();
+        void StopPolling();
         int Capture();
         void Dispose();
 };

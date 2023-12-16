@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Input01_Pressed(IOController* ctrl, int Pin){
+void Run(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if((master->Status == STOP | master->Status == READY)& master->Valid){
         master->SetStatus(RUN);
@@ -17,7 +17,18 @@ void Input01_Pressed(IOController* ctrl, int Pin){
     }
 }
 
-void Input02_Pressed(IOController* ctrl, int Pin){
+void SensorEnabled(IOController* ctrl, int Pin){
+    Master *master = (Master*)ctrl->ParentAddr;
+    if(master->Status == RUN & master->Valid){
+        master->Capture.pause = 1;
+        master->TarFrame = master->Capture.frame.clone();
+        master->Capture.pause = 0;
+        // printf("%d", master->Capture.Capture());
+        // prinf()
+    }
+}
+
+void Stop(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if(master->Status == RUN & master->Valid){
         master->SetStatus(STOP);
@@ -27,7 +38,7 @@ void Input02_Pressed(IOController* ctrl, int Pin){
     }
 }
 
-void Input03_Pressed(IOController* ctrl, int Pin){
+void Reset(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if(master->Status != RUN & master->Valid){
         master->SetStatus(RESET);
@@ -76,19 +87,20 @@ Master::Master(const char* InputDriver,
     this->IO.InputEnabled[0].push_back((void (*)(IOController*, int))test);
     this->IO.InputEnabled[1].push_back((void (*)(IOController*, int))test);
     this->IO.InputEnabled[2].push_back((void (*)(IOController*, int))test);
-    this->IO.InputEnabled[0].push_back((void (*)(IOController*, int))Input01_Pressed);
-    this->IO.InputEnabled[1].push_back((void (*)(IOController*, int))Input02_Pressed);
-    this->IO.InputEnabled[2].push_back((void (*)(IOController*, int))Input03_Pressed);
 
     test = DisableTest;
     this->IO.InputDisabled[0].push_back((void (*)(IOController*, int))test);
     this->IO.InputDisabled[1].push_back((void (*)(IOController*, int))test);
     this->IO.InputDisabled[2].push_back((void (*)(IOController*, int))test);
+    this->IO.InputDisabled[0].push_back((void (*)(IOController*, int))Run);
+    this->IO.InputDisabled[1].push_back((void (*)(IOController*, int))Stop);
+    //this->IO.InputDisabled[2].push_back((void (*)(IOController*, int))Reset);
+    this->IO.InputDisabled[2].push_back((void (*)(IOController*, int))SensorEnabled);
     
     std::function<void()> temp;
     if(this->Segment.Valid 
     && this->IO.Valid 
-    //&& this->Capture.Valid 
+    && this->Capture.Valid 
     && this->Convyer.Valid){
         this->Valid = 1;
     }
@@ -135,6 +147,7 @@ void Master::SetStatus(MasterStatus Status){
 void Master::StartPolling(){
     if(!this->_isPolling){
         this->_isPolling = 1;
+        this->Capture.StartPolling();
         this->Segment.StartPolling();
         this->IO.StartPolling();
         this->Convyer.StartPolling();
@@ -144,6 +157,7 @@ void Master::StartPolling(){
 void Master::StopPolling(){
     if(this->_isPolling){
         this->_isPolling = 0;
+        this->Capture.StopPolling();
         this->Segment.StopPolling();
         this->IO.StopPolling();
         this->Convyer.StopPolling();
@@ -156,4 +170,5 @@ void Master::Dispose(){
     this->IO.Dispose();
     this->Capture.Dispose();
     this->Convyer.Dispose();
+    this->Capture.Dispose();
 }

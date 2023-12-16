@@ -21,8 +21,8 @@ ConvyerController::ConvyerController(const char* ConvyerDriver){
         close(this->_driver);
         return;
     }
-
-    write(this->_driver, &(this->Status), 4);
+    auto temp = (unsigned char)this->Status;
+    write(this->_driver, &(temp), 1);
 }
 
 void ConvyerController::StartPolling(){
@@ -48,11 +48,12 @@ void ConvyerController::Dispose(){
 }
 
 void ConvyerController::Polling(){
-    int temp = 0;
+    printf("Conv\n");
+    unsigned char temp = 0;
 
     while(!this->_isDisposing && this->_isPolling){
-        temp = (int)this->Status;
-        write(this->_driver, &temp, 4);
+        temp = (unsigned char)this->Status;
+        write(this->_driver, &temp, 1);
         this_thread::sleep_for(chrono::milliseconds(1));
     }
 }

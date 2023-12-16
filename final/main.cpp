@@ -22,7 +22,14 @@ int main(void){
         printf("Convyer Controller: %d\n", master.Convyer.Valid);
     }
     master.StartPolling();
-    sleep(15);
+    
+    while(1){
+        
+        if(!master.TarFrame.empty()){
+            imshow("Image", master.TarFrame);
+            waitKey(5);
+        }
+    }
 
     master.Dispose();
 }
