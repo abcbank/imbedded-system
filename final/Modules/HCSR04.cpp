@@ -3,47 +3,81 @@
   Created by Martin Sosic, June 11, 2016.
 */
 #include "HCSR04.hpp"
+Sonar::Sonar(){
+    this->Valid = 0;
+}
+Sonar::Sonar(int triggerPin, int echoPin)
+{
+    setup();
+    this->trigger = triggerPin;
+    this->echo = echoPin;
 
-UltraSonicDistanceSensor::UltraSonicDistanceSensor(byte triggerPin = TRIGGER, byte echoPin = ECHO, unsigned short maxDistanceCm = 400, unsigned long maxTimeoutMicroSec = 0);
- {
-    this->triggerPin = triggerPin;
-    this->echoPin = echoPin;
-    this->maxDistanceCm = maxDistanceCm;
-    this->maxTimeoutMicroSec = maxTimeoutMicroSec;
-    pinMode(triggerPin, OUTPUT);
-    pinMode(echoPin, INPUT);
+    this->Distance = 0;
+    this->_isPolling = 0;
+    this->_isDisposing = 0;
+
+    setup_gpio(triggerPin, OUTPUT, 0);
+    setup_gpio(echoPin, INPUT, 0);
+    output_gpio(this->trigger, LOW);
+    this_thread::sleep_for(chrono::milliseconds(500));
+    this->Valid = 1;
+}
+void Sonar::Polling(){
+    while(!this->_isDisposing && this->_isPolling){
+        this->Distance = this->distance(400);
+        this_thread::sleep_for(chrono::milliseconds(10));
+        
+    }
+}
+void Sonar::StartPolling(){
+
+    if(!this->_poller.joinable() && this->Valid){
+        this->_isPolling = 1;
+        this->_poller = thread([this] { this->Polling(); });
+    }
+}
+void Sonar::StopPolling(){
+
+    if(this->_poller.joinable() && this->Valid){
+        this->_isPolling = 0;
+        this->_poller.join();
+    }
+}
+void Sonar::Dispose(){
+    this->_isDisposing = 1;
+    this->StopPolling();
+    cleanup();
 }
 
-float UltraSonicDistanceSensor::measureDistanceCm() {
-    //Using the approximate formula 19.307°C results in roughly 343m/s which is the commonly used value for air.
-    return measureDistanceCm(19.307);
-}
-
-float UltraSonicDistanceSensor::measureDistanceCm(float temperature) {
+double Sonar::distance(int timeout) {
     unsigned long maxDistanceDurationMicroSec;
 
     // Make sure that trigger pin is LOW.
-    digitalWrite(triggerPin, LOW);
-    delayMicroseconds(2);
+    output_gpio(this->trigger, LOW);
+    this_thread::sleep_for(chrono::milliseconds(10));
     // Hold trigger for 10 microseconds, which is signal for sensor to measure distance.
-    digitalWrite(triggerPin, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(triggerPin, LOW);
-    float speedOfSoundInCmPerMicroSec = 0.03313 + 0.0000606 * temperature; // Cair ≈ (331.3 + 0.606 ⋅ ϑ) m/s
+    output_gpio(this->trigger, HIGH);
+    this_thread::sleep_for(chrono::milliseconds(10));
+    output_gpio(this->trigger, LOW);
 
-    // Compute max delay based on max distance with 25% margin in microseconds
-    maxDistanceDurationMicroSec = 2.5 * maxDistanceCm / speedOfSoundInCmPerMicroSec;
-    if (maxTimeoutMicroSec > 0) {
-    	maxDistanceDurationMicroSec = min(maxDistanceDurationMicroSec, maxTimeoutMicroSec);
-    }
+    this->startTimeUsec=micros();
+    // while(input_gpio(this->echoPin) == LOW){
+    //     now=micros();
+    //     end=micros();
+    // }
+    // while (input_gpio(this->echoPin) == HIGH);
 
-    // Measure the length of echo signal, which is equal to the time needed for sound to go there and back.
-    unsigned long durationMicroSec = pulseIn(echoPin, HIGH, maxDistanceDurationMicroSec); // can't measure beyond max distance
+    while (input_gpio(this->echo) == LOW && micros()-now<timeout);
+        recordPulseLength();
+    this->endTimeUsec=micros();
 
-    float distanceCm = durationMicroSec / 2.0 * speedOfSoundInCmPerMicroSec;
-    if (distanceCm == 0 || distanceCm > maxDistanceCm) {
-        return -1.0 ;
-    } else {
-        return distanceCm;
-    }
+    auto travelTimeUsec = this->endTimeUsec - this->startTimeUsec;
+    printf("%d\n", this->endTimeUsec - this->startTimeUsec);
+    return 100*(((float)travelTimeUsec/1000000.0)*340.29)/2;
+}
+void Sonar::recordPulseLength()
+{
+    startTimeUsec = micros();
+    while ( input_gpio(echo) == HIGH );
+    endTimeUsec = micros();
 }

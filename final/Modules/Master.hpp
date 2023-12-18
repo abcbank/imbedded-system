@@ -14,6 +14,8 @@
 #include "IOController.hpp"
 #include "Camera.hpp"
 #include "ConvyerController.hpp"
+#include "tf.hpp"
+// #include "HCSR04.hpp"
 
 using namespace std;
 
@@ -25,15 +27,21 @@ class Master{
         // void EnableTest(IOController* ctrl, int Pin);
         // void DisableTest(IOController* ctrl, int Pin);
     public:
+        volatile int IsBusy;
+        MasterStatus Status;
+        SequenceStatus SeqStatus;
         Mat TarFrame;
         ConvyerController Convyer;
-        MasterStatus Status;
         IOController IO;
         SegmentController Segment;
+        TFModel TF_lite;
         Camera Capture;
+        // Sonar Sensor;
+        
         int Valid;
         Master(const char* InputDriver, const char* OutputDriver, const char* SegmentDriver, const char * ConvyerDriver, int CamID);
         void SetStatus(MasterStatus Status);
+        void SetSequenceStatus(SequenceStatus Status);
         void StartPolling();
         void StopPolling();
         void Dispose();

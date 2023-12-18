@@ -14,10 +14,10 @@ SegmentController::SegmentController(const char* SegDriver){
     this->_isPolling = 0;
     this->_driver = open(SegDriver, O_RDWR);
 
-    this->Values[0] = 6;
-    this->Values[1] = 7;
-    this->Values[2] = 8;
-    this->Values[3] = 9;
+    this->Values[0] = 0;
+    this->Values[1] = 0;
+    this->Values[2] = 0;
+    this->Values[3] = 0;
 
     if(this->_driver == -1){
         this->Valid = 0;
@@ -57,6 +57,6 @@ void SegmentController::Polling(){
         // printf("%x\n",tmp);
         write(this->_driver, &tmp, 4);
         counter = (counter + 1) % 4;
-        this_thread::sleep_for(chrono::milliseconds(1));
+        this_thread::sleep_for(chrono::milliseconds(3));
     }
 }

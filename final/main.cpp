@@ -24,11 +24,12 @@ int main(void){
     master.StartPolling();
     
     while(1){
-        
+        // printf("Sensor: %f\n", master.Sensor.Distance);
         if(!master.TarFrame.empty()){
             imshow("Image", master.TarFrame);
             waitKey(5);
         }
+        this_thread::sleep_for(chrono::milliseconds(10));
     }
 
     master.Dispose();

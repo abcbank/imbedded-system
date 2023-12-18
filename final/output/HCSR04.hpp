@@ -20,7 +20,6 @@ using namespace std;
 class Sonar
 {
   public:
-    Sonar();
     Sonar(int trigger, int echo);
     void StartPolling();
     void StopPolling();

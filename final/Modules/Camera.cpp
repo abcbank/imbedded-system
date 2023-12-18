@@ -8,6 +8,7 @@ Camera::Camera(){
     this->_isPolling = 0;
     this->pause = 0;
 }
+
 Camera::Camera(int CamID){
     this->cam = VideoCapture(CamID);
     this->Valid = 1;

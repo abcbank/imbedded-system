@@ -10,6 +10,13 @@ enum MasterStatus{
     RESET = 3
 };
 
+enum SequenceStatus{
+    SeqenceNONE = 0,
+    WaitForDetect = 1,
+    RUN_TF = 2,
+    ROBOT = 3
+};
+
 enum ConvyerStatus{
     NONE = 0,
     A = 1,

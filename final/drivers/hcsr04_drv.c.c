@@ -25,6 +25,11 @@ static ssize_t driver_read(struct file *File, char *user_buffer, size_t count, l
 
     to_copy= min(count, sizeof(tmp));
     
+    gpio_set_value(TRIGGER, 0);
+    gpio_set_value(TRIGGER, 1);
+
+    sleep()
+
     tmp.Pin_01 = gpio_get_value(PIN_01);
     tmp.Pin_02 = gpio_get_value(PIN_02);
     tmp.Pin_03 = gpio_get_value(PIN_03);

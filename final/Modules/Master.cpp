@@ -6,7 +6,7 @@ void Run(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if((master->Status == STOP | master->Status == READY)& master->Valid){
         master->SetStatus(RUN);
-        master->Convyer.Status = A;
+        master->SetSequenceStatus(WaitForDetect);
         // 1. Convyer Start
         // 2. if Sensor Enabled
         // 3. Convyer Stop
@@ -19,20 +19,19 @@ void Run(IOController* ctrl, int Pin){
 
 void SensorEnabled(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
-    if(master->Status == RUN & master->Valid){
-        master->Capture.pause = 1;
-        master->TarFrame = master->Capture.frame.clone();
-        master->Capture.pause = 0;
+    if(master->Status == RUN & master->SeqStatus == WaitForDetect & master->Valid){
+        master->SetSequenceStatus(RUN_TF);
         // printf("%d", master->Capture.Capture());
         // prinf()
     }
 }
 
+
 void Stop(IOController* ctrl, int Pin){
     Master *master = (Master*)ctrl->ParentAddr;
     if(master->Status == RUN & master->Valid){
         master->SetStatus(STOP);
-        master->Convyer.Status = NONE;
+        master->SetSequenceStatus(SeqenceNONE);
         // 1. Convyer Stop
         // 2. Robot Stop
     }
@@ -72,11 +71,14 @@ Master::Master(const char* InputDriver,
     this->Valid = 0;
     this->_isDisposing = 0;
     this->_isPolling = 0;
+    this->IsBusy = 0;
 
     this->Segment = SegmentController(SegDriver);
     this->IO = IOController(InputDriver, OutputDriver);
     this->Convyer = ConvyerController(ConvyerDriver);
     this->Capture = Camera(CamID);
+    this->TF_lite = TFModel("ABC");
+    // this->Sensor = Sonar(18,17);
 
     this->Segment.ParentAddr = this;
     this->IO.ParentAddr = this;
@@ -101,13 +103,61 @@ Master::Master(const char* InputDriver,
     if(this->Segment.Valid 
     && this->IO.Valid 
     && this->Capture.Valid 
-    && this->Convyer.Valid){
+    && this->Convyer.Valid
+    // && this->Sensor.Valid
+    ){
         this->Valid = 1;
+    }
+    this->SetStatus(STOP);
+}
+
+void Master::SetSequenceStatus(SequenceStatus Status){
+    if(!this->IsBusy && this->Valid)
+    {
+        this->SeqStatus = Status;
+        if(this->proc.joinable())
+            this->proc.join();
+        switch(Status){
+            case SeqenceNONE:
+                this->proc = thread([this] {
+                    this->IsBusy = true;
+                    this->Convyer.Status = NONE;
+                    this->IsBusy = false;
+                });
+            break;
+            case WaitForDetect:
+                this->proc = thread([this] {
+                    this->IsBusy = true;
+                    this->Convyer.Status = A;
+                    this->IsBusy = false;
+                });
+            break;
+            case RUN_TF:
+                this->proc = thread([this] {
+                    this->IsBusy = true;
+                    this->Convyer.Status = NONE;
+                    this->Capture.pause = 1;
+                    this->TarFrame = this->Capture.frame.clone();
+                    this->Capture.pause = 0;
+                    this->IsBusy = false;
+                    sleep(5);
+                    this->SetSequenceStatus(ROBOT);
+                });
+            break;
+            case ROBOT:
+                this->proc = thread([this] {
+                    this->IsBusy = true;
+                    this->Convyer.Status = NONE;
+                    this->IsBusy = false;
+                });
+            break;
+        }
     }
 }
 
 void Master::SetStatus(MasterStatus Status){
     this->Status = Status;
+    printf("%d", Status);
     switch(Status){
         case READY:
             this->IO.Output.Pin_01 = 0;
@@ -151,6 +201,7 @@ void Master::StartPolling(){
         this->Segment.StartPolling();
         this->IO.StartPolling();
         this->Convyer.StartPolling();
+        // this->Sensor.StartPolling();
     }
 }
 
@@ -161,6 +212,7 @@ void Master::StopPolling(){
         this->Segment.StopPolling();
         this->IO.StopPolling();
         this->Convyer.StopPolling();
+        // this->Sensor.StopPolling();
     }
 }
 
@@ -171,4 +223,5 @@ void Master::Dispose(){
     this->Capture.Dispose();
     this->Convyer.Dispose();
     this->Capture.Dispose();
+    // this->Sensor.Dispose();
 }
